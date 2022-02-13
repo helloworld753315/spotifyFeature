@@ -5,9 +5,9 @@
       <button @click="spotifyLogin" class="button b-small">認証</button>
       <button @click="getPlaylist" class="button b-small">取得</button>
       <ul v-for="data in Playlist" :key="data.id">
-        <li @click="getItems(data.id)">{{ data.name }}</li>
-        <li>{{Items}}</li>
-    </ul>
+        <li @click="getItems(data.id)">{{ data.id }}:{{ data.name }}</li>
+      </ul>
+      <p>{{Feature}}</p>
     </div>
   </div>
 </template>
@@ -19,7 +19,9 @@ export default {
   data: function() {
     return {
       Playlist:null,
-      Items:null
+      Items:null,
+      idList:null,
+      Feature:null
     }
   },
   props: {
@@ -62,6 +64,27 @@ export default {
         console.error(err)
       })
     },
+    getFeature: function(id_list){
+      let vm = this
+      let ids = id_list.join(",");
+      let endpoint = 'https://api.spotify.com/v1/audio-features?ids=' + ids;
+      let data = {
+        headers: {
+          'Authorization': this.routeParams.token_type + ' ' + this.routeParams.access_token
+        },
+        data: {}
+      }
+      axios
+      .get(endpoint, data)
+      .then(res => {
+        console.log(ids);
+        vm.Feature = res.data.audio_features
+        console.log(vm.Feature)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }, 
     getItems: function(playlist_id){
       let vm = this
       let endpoint = 'https://api.spotify.com/v1/playlists/'+ playlist_id + '/tracks'
@@ -75,7 +98,9 @@ export default {
       .get(endpoint, data)
       .then(res => {
         vm.Items = res.data.items
-        console.log(vm.Items)
+        const track_id_list = vm.Items.map(item => item.track.id);
+        vm.idList = track_id_list;
+        this.getFeature(vm.idList);
       })
       .catch(err => {
         console.error(err)
