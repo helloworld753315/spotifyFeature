@@ -3,6 +3,11 @@
     <h1>Spotify</h1>
     <div class="row">
       <button @click="spotifyLogin" class="button b-small">認証</button>
+      <button @click="getPlaylist" class="button b-small">取得</button>
+      <ul v-for="data in Playlist" :key="data.id">
+        <li>{{ data.name }}</li>
+        <li><a v-bind:href="data.external_urls.spotify">{{data.external_urls.spotify}}</a></li>
+    </ul>
     </div>
   </div>
 </template>
@@ -13,7 +18,7 @@ import axios from 'axios'
 export default {
   data: function() {
     return {
-      History: []
+      Playlist:null
     }
   },
   props: {
@@ -31,13 +36,31 @@ export default {
       let client_id = '6c5f168e00e04a219e70682109e83f0c'
       // let redirect_uri = 'http://0.0.0.0:9000'
       let redirect_uri = 'http://0.0.0.0:9000'
-      let scope = 'user-read-recently-played'
+      let scope = 'playlist-read-private'
       location.href = endpoint +
         '?response_type=' + response_type +
         '&client_id=' + client_id +
         '&redirect_uri=' + redirect_uri +
         '&scope=' + scope
-    }
+    },
+    getPlaylist: function() {
+      let vm = this
+      let endpoint = 'https://api.spotify.com/v1/me/playlists'
+      let data = {
+        headers: {
+          'Authorization': this.routeParams.token_type + ' ' + this.routeParams.access_token
+        },
+        data: {}
+      }
+      axios
+      .get(endpoint, data)
+      .then(res => {
+        vm.Playlist = res.data.items
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
   }
 }
 </script>
