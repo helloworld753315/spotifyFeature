@@ -4,7 +4,10 @@
     <div class="row">
       <button @click="spotifyLogin" class="button b-small">認証</button>
       <button @click="getPlaylist" class="button b-small">取得</button>
-      <p>{{Playlist}}</p>
+      <ul v-for="data in Playlist" :key="data.id">
+        <li>{{ data.name }}</li>
+        <li><a v-bind:href="data.external_urls.spotify">{{data.external_urls.spotify}}</a></li>
+    </ul>
     </div>
   </div>
 </template>
@@ -33,7 +36,7 @@ export default {
       let client_id = '6c5f168e00e04a219e70682109e83f0c'
       // let redirect_uri = 'http://0.0.0.0:9000'
       let redirect_uri = 'http://0.0.0.0:9000'
-      let scope = 'user-read-recently-played'
+      let scope = 'playlist-read-private'
       location.href = endpoint +
         '?response_type=' + response_type +
         '&client_id=' + client_id +
