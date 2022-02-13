@@ -3,6 +3,8 @@
     <h1>Spotify</h1>
     <div class="row">
       <button @click="spotifyLogin" class="button b-small">認証</button>
+      <button @click="getPlaylist" class="button b-small">取得</button>
+      <p>{{Playlist}}</p>
     </div>
   </div>
 </template>
@@ -13,7 +15,7 @@ import axios from 'axios'
 export default {
   data: function() {
     return {
-      History: []
+      Playlist:null
     }
   },
   props: {
@@ -37,7 +39,25 @@ export default {
         '&client_id=' + client_id +
         '&redirect_uri=' + redirect_uri +
         '&scope=' + scope
-    }
+    },
+    getPlaylist: function() {
+      let vm = this
+      let endpoint = 'https://api.spotify.com/v1/me/playlists'
+      let data = {
+        headers: {
+          'Authorization': this.routeParams.token_type + ' ' + this.routeParams.access_token
+        },
+        data: {}
+      }
+      axios
+      .get(endpoint, data)
+      .then(res => {
+        vm.Playlist = res.data.items
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
   }
 }
 </script>
