@@ -5,8 +5,8 @@
       <button @click="spotifyLogin" class="button b-small">認証</button>
       <button @click="getPlaylist" class="button b-small">取得</button>
       <ul v-for="data in Playlist" :key="data.id">
-        <li>{{ data.name }}</li>
-        <li><a v-bind:href="data.external_urls.spotify">{{data.external_urls.spotify}}</a></li>
+        <li @click="getItems(data.id)">{{ data.name }}</li>
+        <li>{{Items}}</li>
     </ul>
     </div>
   </div>
@@ -18,7 +18,8 @@ import axios from 'axios'
 export default {
   data: function() {
     return {
-      Playlist:null
+      Playlist:null,
+      Items:null
     }
   },
   props: {
@@ -61,6 +62,25 @@ export default {
         console.error(err)
       })
     },
+    getItems: function(playlist_id){
+      let vm = this
+      let endpoint = 'https://api.spotify.com/v1/playlists/'+ playlist_id + '/tracks'
+      let data = {
+        headers: {
+          'Authorization': this.routeParams.token_type + ' ' + this.routeParams.access_token
+        },
+        data: {}
+      }
+      axios
+      .get(endpoint, data)
+      .then(res => {
+        vm.Items = res.data.items
+        console.log(vm.Items)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }
   }
 }
 </script>
