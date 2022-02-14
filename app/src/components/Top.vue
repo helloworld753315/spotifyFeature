@@ -5,9 +5,11 @@
       <button @click="spotifyLogin" class="button b-small">認証</button>
       <button @click="getPlaylist" class="button b-small">取得</button>
       <ul v-for="data in Playlist" :key="data.id">
-        <li @click="getItems(data.id)">{{ data.id }}:{{ data.name }}</li>
+        <li @click="getItems(data.id)">{{ data.name }}</li>
       </ul>
-      <p>{{Feature}}</p>
+      <ul v-for="data in Feature" :key="data.id">
+        <li>{{ data }}</li>
+      </ul>
     </div>
   </div>
 </template>
