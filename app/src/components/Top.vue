@@ -10,20 +10,30 @@
       <ul v-for="data in Feature" :key="data.id">
         <li>{{ data }}</li>
       </ul>
+      <Chart />
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import Chart from './Chart';
 
 export default {
+  components: {
+    Chart,
+  },
   data: function() {
     return {
       Playlist:null,
       Items:null,
       idList:null,
-      Feature:null
+      Feature:null, 
+      height:100, 
+      width: 10, 
+
+      loaded: false,
+      chartdata: null
     }
   },
   props: {
@@ -34,6 +44,15 @@ export default {
       this.$router.push(this.$route.fullPath.replace('#', '?'))
     }
   },
+  computed:{
+    myStyles(){
+      return{
+        height: `${this.height}px`,
+        width: `${this.width}px`,
+        position:'relative'
+      }
+    }
+  }, 
   methods: {
     spotifyLogin: function() {
       let endpoint = 'https://accounts.spotify.com/authorize'
@@ -80,8 +99,13 @@ export default {
       .get(endpoint, data)
       .then(res => {
         console.log(ids);
-        vm.Feature = res.data.audio_features
-        console.log(vm.Feature)
+        vm.Feature = res.data.audio_features;
+        const danceability_list = vm.Feature.map(item => item.danceability);
+        const energy_list = vm.Feature.map(item => item.energy);
+        const loudness_list = vm.Feature.map(item => item.loudness);
+        const speechiness_list = vm.Feature.map(item => item.speechiness);
+        const acousticness_list = vm.Feature.map(item => item.acousticness);
+        console.log(energy_list)
       })
       .catch(err => {
         console.error(err)
