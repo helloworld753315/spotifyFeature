@@ -6,7 +6,7 @@
       <button @click="getPlaylist" class="button b-small">取得</button>
       <chart
       v-if="loaded"
-      :chartdata="chartItems" :options="options"/>
+      :chartData="chartItems" :options="options"/>
       <ul v-for="data in Playlist" :key="data.id">
         <li @click="getItems(data.id)">{{ data.name }}</li>
       </ul>
@@ -36,20 +36,13 @@ export default {
 
       loaded: false,
       chartdata: null,  
-      chartItems: {
-        labels: ["12月", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月"],
-        datasets: [{
-          label: "月ごとの点数",
-          data: [95, 70, 80, 65, 69, 80, 100, 100, 72, 81, 45, 70],
-          backgroundColor: 'lightblue'
-        }]
-      },
+      chartItems: null,
       options: {
         scales: {
           xAxes: [{
             scaleLabel: {
               display: true,
-              labelString: '1'
+              labelString: '曲順'
             }
           }],
           yAxes: [{
@@ -142,7 +135,6 @@ export default {
           }]
         },
         console.log("####");
-        console.log(vm.chartdata);
         vm.loaded = true;
       })
       .catch(err => {
