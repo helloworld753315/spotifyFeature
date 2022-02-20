@@ -46,6 +46,8 @@ export default {
             }
           }],
           yAxes: [{
+            id: "danceability",
+            position: "left",
             ticks: {
               beginAtZero: true,
               stepSize: 0.1,
@@ -130,8 +132,9 @@ export default {
           labels: [...Array(danceability_list.length)].map((_, i) => i),
           datasets: [{
             label: "danceability",
-            data: vm.Feature.map(item => item.danceability),
-            backgroundColor: 'lightblue'
+            data: danceability_list,
+            backgroundColor: 'lightblue',
+            yAxisID: 'danceability'
           }]
         },
         console.log("####");
