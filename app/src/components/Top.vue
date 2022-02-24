@@ -150,6 +150,9 @@ export default {
         const speechiness_list = vm.Feature.map(item => item.speechiness);
         const acousticness_list = vm.Feature.map(item => item.acousticness);
 
+        console.log(danceability_list);
+        console.log(loudness_list);
+
         vm.chartItems = {
           labels: [...Array(danceability_list.length)].map((_, i) => i),
           datasets: [
@@ -165,7 +168,13 @@ export default {
             backgroundColor: '#f87000',
             yAxisID: 'features'
           },
-          
+          {
+            label: "loudness",
+            data: loudness_list,
+            backgroundColor: '#f08080',
+            yAxisID: 'features'
+          },
+
           ]
         },
         console.log("####");
