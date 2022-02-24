@@ -45,14 +45,36 @@ export default {
               labelString: '曲順'
             }
           }],
-          yAxes: [{
-            id: "danceability",
+          yAxes: [
+          {
+            id: "features",
             position: "left",
             ticks: {
+              min: 0, // 最小値
+              max: 1, // 最大値
+              beginAtZero: true,
+              stepSize: 0.1
+            }
+          },
+          /*
+          {
+            id: "energy",
+            position: "right",
+            gridLines: { // 補助線
+              drawBorder: false,
+              display: false
+            },
+            scaleLabel:{
+              display: false,
+            },
+            ticks: {
+              min: 0, // 最小値
+              max: 1, // 最大値
               beginAtZero: true,
               stepSize: 0.1,
             }
-          }]
+          }*/
+          ]
         }, 
         responsive: true,
         maintainAspectRatio: false
@@ -130,12 +152,21 @@ export default {
 
         vm.chartItems = {
           labels: [...Array(danceability_list.length)].map((_, i) => i),
-          datasets: [{
+          datasets: [
+          {
             label: "danceability",
             data: danceability_list,
             backgroundColor: 'lightblue',
-            yAxisID: 'danceability'
-          }]
+            yAxisID: 'features'
+          },
+          {
+            label: "energy",
+            data: energy_list,
+            backgroundColor: '#f87000',
+            yAxisID: 'features'
+          },
+          
+          ]
         },
         console.log("####");
         vm.loaded = true;
