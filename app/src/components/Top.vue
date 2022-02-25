@@ -4,19 +4,13 @@
     <div class="row">
       <button @click="spotifyLogin" class="button b-small">認証</button>
       <button @click="getPlaylist" class="button b-small">取得</button>
-      <!--
-      <chart
-      v-if="loaded"
-      :chartData="chartItems" :options="options"/>
-      -->
-      <div v-for="chartItem in chartItems" :key="chartItem.id">
-        <chart v-if="loaded" :chartData="chartItem" :options="options" />
+      <div class="radio-button" v-for="(label,index) in keys" :key="index">
+          <input type="radio" name="label" v-bind:id="label" @click="selectLabel(index)">
+          <label v-bind:id="label">{{label}}</label>
       </div>
+      <chart v-if="loaded" :chartData="chartItem" :options="options" />
       <ul v-for="data in Playlist" :key="data.id">
         <li @click="getItems(data.id)">{{ data.name }}</li>
-      </ul>
-      <ul v-for="data in Feature" :key="data.id">
-        <li>{{ data }}</li>
       </ul>
     </div>
   </div>
@@ -36,12 +30,13 @@ export default {
       Items: null,
       idList: null,
       Feature: null,
+      featuresList: [], // 特徴量を各データごとに分けてまとめたリスト
       height: 100,
       width: 10,
 
       loaded: false,
       chartdata: null,
-      chartItems: null,
+      chartItem: null,
       options: {
         scales: {
           xAxes: [
@@ -57,8 +52,7 @@ export default {
               id: "features",
               position: "left",
               ticks: {
-                beginAtZero: true,
-                stepSize: 0.1
+                beginAtZero: true
               }
             }
             /*
@@ -83,7 +77,8 @@ export default {
         },
         responsive: true,
         maintainAspectRatio: false
-      }
+      },
+      keys: null
     };
   },
   props: {
@@ -155,69 +150,34 @@ export default {
       axios
         .get(endpoint, data)
         .then(res => {
+          //vm.Feature = res.data.audio_features;
           vm.Feature = res.data.audio_features;
           const danceability_list = vm.Feature.map(item => item.danceability);
-          const energy_list = vm.Feature.map(item => item.energy);
-          const loudness_list = vm.Feature.map(item => item.loudness);
-          const speechiness_list = vm.Feature.map(item => item.speechiness);
-          const acousticness_list = vm.Feature.map(item => item.acousticness);
           const features_list = []; // 特徴量を各データごとに分けてまとめたリスト
           // const features_list = vm.Feature.map(item => item.acousticness);
           //const keys = Object.keys(vm.Feature[0]);
 
-          var removals = ['id', 'type', 'uri', 'track_href', 'analysis_url'];
-          const keys = Object.keys(vm.Feature[0]).filter(function(v){
+          const removals = ['id', 'type', 'uri', 'track_href', 'analysis_url'];
+           vm.keys = Object.keys(vm.Feature[0]).filter(function(v){
             return ! removals.includes(v);
           });
 
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            if (key != "id" && key != "type" && key != "uri" && key != "track_href" && key != "analysis_url"){
-              const features = vm.Feature.map((item, index) => item[key]);
-              features_list.push(features);
-            }
+          for (let i = 0; i < vm.keys.length; i++) {
+            const key = vm.keys[i];
+            const features = vm.Feature.map((item, index) => item[key]);
+            vm.featuresList.push(features);
           }
 
-          vm.chartItems = []
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            const data =             {
-            labels: [...Array(danceability_list.length)].map((_, i) => i),
+          vm.chartItem = {
+            labels: [...Array(vm.Feature.length)].map((_, i) => i),
             datasets: [
               {
-                label: key,
-                data: features_list[i],
+                label: vm.keys[0],
+                data: vm.featuresList[0],
                 backgroundColor: "lightblue",
                 yAxisID: "features"
               }]
-            }
-            vm.chartItems.push(data);
-          }
-
-          /*
-          vm.chartItems = [
-            {
-            labels: [...Array(danceability_list.length)].map((_, i) => i),
-            datasets: [
-              {
-                label: "danceability",
-                data: danceability_list,
-                backgroundColor: "lightblue",
-                yAxisID: "features"
-              }]
-            },
-            {
-            labels: [...Array(danceability_list.length)].map((_, i) => i),
-            datasets: [
-              {
-                label: "energy",
-                data: energy_list,
-                backgroundColor: "#f87000",
-                yAxisID: "features"
-              }]
-            }
-          ],
-          */
+          },
           vm.loaded = true;
         })
         .catch(err => {
@@ -232,8 +192,7 @@ export default {
         headers: {
           Authorization:
             this.routeParams.token_type + " " + this.routeParams.access_token
-        },
-        data: {}
+        }
       };
       axios
         .get(endpoint, data)
@@ -246,6 +205,19 @@ export default {
         .catch(err => {
           console.error(err);
         });
+    },
+    selectLabel: function(index){
+        this.chartItem = {
+            labels: [...Array(this.Feature.length)].map((_, i) => i),
+            datasets: [
+              {
+                label: this.keys[index],
+                data: this.featuresList[index],
+                backgroundColor: "lightblue",
+                yAxisID: "features"
+              }
+            ]
+        }
     }
   }
 };
