@@ -57,8 +57,6 @@ export default {
               id: "features",
               position: "left",
               ticks: {
-                min: 0, // 最小値
-                max: 1, // 最大値
                 beginAtZero: true,
                 stepSize: 0.1
               }
@@ -163,11 +161,42 @@ export default {
           const loudness_list = vm.Feature.map(item => item.loudness);
           const speechiness_list = vm.Feature.map(item => item.speechiness);
           const acousticness_list = vm.Feature.map(item => item.acousticness);
+          const features_list = []; // 特徴量を各データごとに分けてまとめたリスト
+          // const features_list = vm.Feature.map(item => item.acousticness);
+          //const keys = Object.keys(vm.Feature[0]);
 
-          console.log(danceability_list);
-          console.log(loudness_list);
+          var removals = ['id', 'type', 'uri', 'track_href', 'analysis_url'];
+          const keys = Object.keys(vm.Feature[0]).filter(function(v){
+            return ! removals.includes(v);
+          });
 
-          vm.chartItems = {
+          for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            if (key != "id" && key != "type" && key != "uri" && key != "track_href" && key != "analysis_url"){
+              const features = vm.Feature.map((item, index) => item[key]);
+              features_list.push(features);
+            }
+          }
+
+          vm.chartItems = []
+          for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            const data =             {
+            labels: [...Array(danceability_list.length)].map((_, i) => i),
+            datasets: [
+              {
+                label: key,
+                data: features_list[i],
+                backgroundColor: "lightblue",
+                yAxisID: "features"
+              }]
+            }
+            vm.chartItems.push(data);
+          }
+
+          /*
+          vm.chartItems = [
+            {
             labels: [...Array(danceability_list.length)].map((_, i) => i),
             datasets: [
               {
@@ -175,24 +204,20 @@ export default {
                 data: danceability_list,
                 backgroundColor: "lightblue",
                 yAxisID: "features"
-              },
-              /*
+              }]
+            },
+            {
+            labels: [...Array(danceability_list.length)].map((_, i) => i),
+            datasets: [
               {
                 label: "energy",
                 data: energy_list,
                 backgroundColor: "#f87000",
                 yAxisID: "features"
-              },
-              {
-                label: "loudness",
-                data: loudness_list,
-                backgroundColor: "#f08080",
-                yAxisID: "features"
-              }
-              */
-            ]
-          },
-            console.log("####");
+              }]
+            }
+          ],
+          */
           vm.loaded = true;
         })
         .catch(err => {
