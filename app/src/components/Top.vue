@@ -106,8 +106,8 @@ export default {
       let response_type = "token";
       let client_id = "6c5f168e00e04a219e70682109e83f0c";
       // let client_id = process.env.VUE_APP_CLIENT_ID;
-      // let redirect_uri = "https://spotify-feature.netlify.app";
-      let redirect_uri = "http://0.0.0.0:9000";
+      let redirect_uri = "https://spotify-feature.netlify.app";
+      // let redirect_uri = "http://0.0.0.0:9000";
       let scope = "playlist-read-private";
       location.href =
         endpoint +
