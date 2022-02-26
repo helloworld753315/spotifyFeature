@@ -4,9 +4,11 @@
     <div class="row">
       <button @click="spotifyLogin" class="button b-small">認証</button>
       <button @click="getPlaylist" class="button b-small">取得</button>
-      <div class="radio-button" v-for="(label,index) in keys" :key="index">
+      <div class="radio-container" v-for="(label,index) in keys" :key="index">
+        <div class="radio-button">
           <input type="radio" name="label" v-bind:id="label" @click="selectLabel(index)">
           <label v-bind:id="label">{{label}}</label>
+        </div>
       </div>
       <chart v-if="loaded" :chartData="chartItem" :options="options" />
       <ul v-for="data in Playlist" :key="data.id">
@@ -103,7 +105,7 @@ export default {
       let endpoint = "https://accounts.spotify.com/authorize";
       let response_type = "token";
       let client_id = "6c5f168e00e04a219e70682109e83f0c";
-      // let redirect_uri = 'http://0.0.0.0:9000'
+      // let client_id = process.env.VUE_APP_CLIENT_ID;
       let redirect_uri = "http://0.0.0.0:9000";
       let scope = "playlist-read-private";
       location.href =
@@ -118,6 +120,8 @@ export default {
         scope;
     },
     getPlaylist: function() {
+      console.log(process.env.NODE_ENV_SPOTIFY_CLIENT_ID)
+      console.log(process.env.VUE_APP_SPOTIFY_CLIENT_ID)
       let vm = this;
       let endpoint = "https://api.spotify.com/v1/me/playlists";
       let data = {
@@ -255,6 +259,15 @@ export default {
   box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
   color: #fff;
   transform: translateY(-2px);
+}
+
+.radio-container{
+  display: flex;
+}
+
+.radio-button{
+  /*display: flex;*/
+  flex-basis:  400px;
 }
 
 .b-small {
