@@ -4,8 +4,8 @@
     <div class="row">
       <button @click="spotifyLogin" class="button b-small">認証</button>
       <button @click="getPlaylist" class="button b-small">取得</button>
-      <div class="radio-container" v-for="(label,index) in keys" :key="index">
-        <div class="radio-button">
+      <div class="radio-container">
+        <div class="radio-button" v-for="(label,index) in keys" :key="index">
           <input type="radio" name="label" v-bind:id="label" @click="selectLabel(index)">
           <label v-bind:id="label">{{label}}</label>
         </div>
@@ -104,10 +104,10 @@ export default {
     spotifyLogin: function() {
       let endpoint = "https://accounts.spotify.com/authorize";
       let response_type = "token";
-      let client_id = "6c5f168e00e04a219e70682109e83f0c";
+      let client_id = process.env.VUE_APP_SPOTIFY_CLIENT_ID;
       // let client_id = process.env.VUE_APP_CLIENT_ID;
-      let redirect_uri = "https://spotify-feature.netlify.app";
-      // let redirect_uri = "http://0.0.0.0:9000";
+      // let redirect_uri = "https://spotify-feature.netlify.app";
+      let redirect_uri = "http://0.0.0.0:9000";
       let scope = "playlist-read-private";
       location.href =
         endpoint +
@@ -121,8 +121,6 @@ export default {
         scope;
     },
     getPlaylist: function() {
-      console.log(process.env.VUE_APP_SPOTIFY_CLIENT_ID)
-      console.log(process.env.NODE_ENV)
       let vm = this;
       let endpoint = "https://api.spotify.com/v1/me/playlists";
       let data = {
@@ -166,6 +164,8 @@ export default {
            vm.keys = Object.keys(vm.Feature[0]).filter(function(v){
             return ! removals.includes(v);
           });
+
+          vm.featuresList.splice(0, vm.featuresList.length);
 
           for (let i = 0; i < vm.keys.length; i++) {
             const key = vm.keys[i];
@@ -267,8 +267,12 @@ export default {
 }
 
 .radio-button{
+  display: inline-flex;
   /*display: flex;*/
-  flex-basis:  400px;
+}
+
+.radio-button label{
+  cursor: pointer;
 }
 
 .b-small {
