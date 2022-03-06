@@ -105,7 +105,6 @@ export default {
       let endpoint = "https://accounts.spotify.com/authorize";
       let response_type = "token";
       let client_id = process.env.VUE_APP_SPOTIFY_CLIENT_ID;
-      // let client_id = process.env.VUE_APP_CLIENT_ID;
       // let redirect_uri = "https://spotify-feature.netlify.app";
       let redirect_uri = "http://0.0.0.0:9000";
       let scope = "playlist-read-private";
@@ -121,6 +120,7 @@ export default {
         scope;
     },
     getPlaylist: function() {
+      console.log(process.env.VUE_APP_SPOTIFY_CLIENT_ID)
       let vm = this;
       let endpoint = "https://api.spotify.com/v1/me/playlists";
       let data = {

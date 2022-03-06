@@ -6,7 +6,7 @@ import router from './router'
 import dotenv from 'dotenv'
 
 Vue.config.productionTip = false
-dotenv.config()
+dotenv.config();
 
 /* eslint-disable no-new */
 new Vue({
