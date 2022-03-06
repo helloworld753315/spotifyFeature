@@ -165,6 +165,8 @@ export default {
             return ! removals.includes(v);
           });
 
+          vm.featuresList.splice(0, vm.featuresList.length);
+
           for (let i = 0; i < vm.keys.length; i++) {
             const key = vm.keys[i];
             const features = vm.Feature.map((item, index) => item[key]);
@@ -188,7 +190,6 @@ export default {
         });
     },
     getItems: function(playlist_id) {
-      console.log("id:" + playlist_id);
       let vm = this;
       let endpoint =
         "https://api.spotify.com/v1/playlists/" + playlist_id + "/tracks";
@@ -202,7 +203,6 @@ export default {
         .get(endpoint, data)
         .then(res => {
           vm.Items = res.data.items;
-          console.log(vm.Items);
           const track_id_list = vm.Items.map(item => item.track.id);
           vm.idList = track_id_list;
           this.getFeature(vm.idList);
