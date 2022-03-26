@@ -1,8 +1,10 @@
 <template>
   <div class="container">
-    <h1>Spotify Feature</h1>
-    <button @click="spotifyLogin" class="button b-small">連携</button>
-    <button @click="getPlaylist" class="button b-small">取得</button>
+    <div class="row top">
+      <h1>Spotify Feature</h1>
+      <button @click="spotifyLogin" class="button b-small">連携</button>
+      <button @click="getPlaylist" class="button b-small">取得</button>
+    </div>
     <div class="row">
       <div class="radio-container">
         <div class="radio-button" v-for="(label,index) in keys" :key="index">
@@ -278,4 +280,13 @@ export default {
 .row ul{
   list-style: none; padding-left: 0;
 }
+
+.top{
+  display: flex;
+}
+
+.top .button{
+  margin: auto 10px;
+}
+
 </style>
