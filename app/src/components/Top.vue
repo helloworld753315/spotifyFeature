@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <h1>Spotify</h1>
+    <h1>Spotify Feature</h1>
+    <button @click="spotifyLogin" class="button b-small">連携</button>
+    <button @click="getPlaylist" class="button b-small">取得</button>
     <div class="row">
-      <button @click="spotifyLogin" class="button b-small">認証</button>
-      <button @click="getPlaylist" class="button b-small">取得</button>
       <div class="radio-container">
         <div class="radio-button" v-for="(label,index) in keys" :key="index">
           <input type="radio" name="label" v-bind:id="label" @click="selectLabel(index)">
@@ -57,24 +57,6 @@ export default {
                 beginAtZero: true
               }
             }
-            /*
-          {
-            id: "energy",
-            position: "right",
-            gridLines: { // 補助線
-              drawBorder: false,
-              display: false
-            },
-            scaleLabel:{
-              display: false,
-            },
-            ticks: {
-              min: 0, // 最小値
-              max: 1, // 最大値
-              beginAtZero: true,
-              stepSize: 0.1,
-            }
-          }*/
           ]
         },
         responsive: true,
@@ -120,7 +102,6 @@ export default {
         scope;
     },
     getPlaylist: function() {
-      console.log(process.env.VUE_APP_SPOTIFY_CLIENT_ID)
       let vm = this;
       let endpoint = "https://api.spotify.com/v1/me/playlists";
       let data = {
@@ -229,13 +210,11 @@ export default {
 </script>
 
 <style coped>
-/*
-.button {
-  border: none; 
-  background-color: rgb(228, 228, 228);
-  border-radius: 30px;
+
+.container h1{
+  text-align: left;
+  margin: 20px 60px;
 }
-*/
 
 .button {
   width: 140px;
@@ -296,8 +275,7 @@ export default {
   color: rgb(255, 255, 255);
 }
 
-.row {
-  margin: 0 auto;
-  padding: 30px 20px;
+.row ul{
+  list-style: none; padding-left: 0;
 }
 </style>
