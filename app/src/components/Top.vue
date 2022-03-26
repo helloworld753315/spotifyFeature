@@ -2,8 +2,10 @@
   <div class="container">
     <div class="row top">
       <h1>Spotify Feature</h1>
-      <button @click="spotifyLogin" class="button b-small">連携</button>
-      <button @click="getPlaylist" class="button b-small">取得</button>
+      <div class="button-container">
+        <button @click="spotifyLogin" class="button b-small">連携</button>
+        <button @click="getPlaylist" class="button b-small">取得</button>
+      </div>
     </div>
     <div class="row">
       <div class="radio-container">
@@ -13,7 +15,7 @@
         </div>
       </div>
       <chart v-if="loaded" :chartData="chartItem" :options="options" />
-      <ul v-for="data in Playlist" :key="data.id">
+      <ul v-for="data in Playlist" :key="data.id" class="playlist-data">
         <li @click="getItems(data.id)">{{ data.name }}</li>
       </ul>
     </div>
@@ -216,6 +218,7 @@ export default {
 .container h1{
   text-align: left;
   margin: 20px 60px;
+  font-size: 40px;
 }
 
 .button {
@@ -285,8 +288,15 @@ export default {
   display: flex;
 }
 
-.top .button{
-  margin: auto 10px;
+.row .button-container{
+  margin: auto 40px;
+  margin-left: auto;
+}
+
+.playlist-data{
+  text-align: left;
+  margin: 30px 80px;
+  font-size: 20px;
 }
 
 </style>
