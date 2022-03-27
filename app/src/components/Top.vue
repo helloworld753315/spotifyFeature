@@ -295,8 +295,16 @@ export default {
 
 .playlist-data{
   text-align: left;
-  margin: 30px 80px;
+  margin: 0 80px;
   font-size: 20px;
+}
+
+.playlist-data li{
+  margin: 20px 10px;
+  padding: 15px;
+  background: #b9b9b9;
+  border-radius: 10px;
+  cursor: default;
 }
 
 </style>
