@@ -11,4 +11,5 @@ services:
       - ./app:/app:cached
     tty: true
     stdin_open: true
+    env_file: ./app/.env
     command: npm run dev

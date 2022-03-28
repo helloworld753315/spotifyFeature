@@ -1,9 +1,13 @@
 <template>
   <div class="container">
-    <h1>Spotify</h1>
+    <div class="row top">
+      <h1>Spotify Feature</h1>
+      <div class="button-container">
+        <button @click="spotifyLogin" class="button b-small">連携</button>
+        <button @click="getPlaylist" class="button b-small">取得</button>
+      </div>
+    </div>
     <div class="row">
-      <button @click="spotifyLogin" class="button b-small">認証</button>
-      <button @click="getPlaylist" class="button b-small">取得</button>
       <div class="radio-container">
         <div class="radio-button" v-for="(label,index) in keys" :key="index">
           <input type="radio" name="label" v-bind:id="label" @click="selectLabel(index)">
@@ -11,7 +15,7 @@
         </div>
       </div>
       <chart v-if="loaded" :chartData="chartItem" :options="options" />
-      <ul v-for="data in Playlist" :key="data.id">
+      <ul v-for="data in Playlist" :key="data.id" class="playlist-data">
         <li @click="getItems(data.id)">{{ data.name }}</li>
       </ul>
     </div>
@@ -57,24 +61,6 @@ export default {
                 beginAtZero: true
               }
             }
-            /*
-          {
-            id: "energy",
-            position: "right",
-            gridLines: { // 補助線
-              drawBorder: false,
-              display: false
-            },
-            scaleLabel:{
-              display: false,
-            },
-            ticks: {
-              min: 0, // 最小値
-              max: 1, // 最大値
-              beginAtZero: true,
-              stepSize: 0.1,
-            }
-          }*/
           ]
         },
         responsive: true,
@@ -105,9 +91,8 @@ export default {
       let endpoint = "https://accounts.spotify.com/authorize";
       let response_type = "token";
       let client_id = process.env.VUE_APP_SPOTIFY_CLIENT_ID;
-      // let client_id = process.env.VUE_APP_CLIENT_ID;
-      // let redirect_uri = "https://spotify-feature.netlify.app";
-      let redirect_uri = "http://0.0.0.0:9000";
+      let redirect_uri = "https://spotify-feature.netlify.app";
+      // let redirect_uri = "http://0.0.0.0:9000";
       let scope = "playlist-read-private";
       location.href =
         endpoint +
@@ -179,7 +164,7 @@ export default {
               {
                 label: vm.keys[0],
                 data: vm.featuresList[0],
-                backgroundColor: "lightblue",
+                backgroundColor: "#1db954",
                 yAxisID: "features"
               }]
           },
@@ -218,7 +203,7 @@ export default {
               {
                 label: this.keys[index],
                 data: this.featuresList[index],
-                backgroundColor: "lightblue",
+                backgroundColor: "#1db954",
                 yAxisID: "features"
               }
             ]
@@ -229,13 +214,12 @@ export default {
 </script>
 
 <style coped>
-/*
-.button {
-  border: none; 
-  background-color: rgb(228, 228, 228);
-  border-radius: 30px;
+
+.container h1{
+  text-align: left;
+  margin: 20px 60px;
+  font-size: 40px;
 }
-*/
 
 .button {
   width: 140px;
@@ -296,8 +280,31 @@ export default {
   color: rgb(255, 255, 255);
 }
 
-.row {
-  margin: 0 auto;
-  padding: 30px 20px;
+.row ul{
+  list-style: none; padding-left: 0;
 }
+
+.top{
+  display: flex;
+}
+
+.row .button-container{
+  margin: auto 40px;
+  margin-left: auto;
+}
+
+.playlist-data{
+  text-align: left;
+  margin: 0 80px;
+  font-size: 20px;
+}
+
+.playlist-data li{
+  margin: 20px 10px;
+  padding: 15px;
+  background: #b9b9b9;
+  border-radius: 10px;
+  cursor: default;
+}
+
 </style>
