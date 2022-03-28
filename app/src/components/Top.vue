@@ -91,8 +91,8 @@ export default {
       let endpoint = "https://accounts.spotify.com/authorize";
       let response_type = "token";
       let client_id = process.env.VUE_APP_SPOTIFY_CLIENT_ID;
-      // let redirect_uri = "https://spotify-feature.netlify.app";
-      let redirect_uri = "http://0.0.0.0:9000";
+      let redirect_uri = "https://spotify-feature.netlify.app";
+      // let redirect_uri = "http://0.0.0.0:9000";
       let scope = "playlist-read-private";
       location.href =
         endpoint +
@@ -164,7 +164,7 @@ export default {
               {
                 label: vm.keys[0],
                 data: vm.featuresList[0],
-                backgroundColor: "lightblue",
+                backgroundColor: "#1db954",
                 yAxisID: "features"
               }]
           },
@@ -203,7 +203,7 @@ export default {
               {
                 label: this.keys[index],
                 data: this.featuresList[index],
-                backgroundColor: "lightblue",
+                backgroundColor: "#1db954",
                 yAxisID: "features"
               }
             ]
